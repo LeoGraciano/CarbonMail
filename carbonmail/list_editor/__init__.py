@@ -1,12 +1,12 @@
 import PySimpleGUI as sg
 from PySimpleGUI import WIN_CLOSED
-from carbonmail.email_sender import views
-from carbonmail.list_editor.manager import initialize as init_list_editor
+from carbonmail.list_editor import views
 
 
-class EmailSender:
-    def __init__(self):
+class ListEditor:
+    def __init__(self, email_sender):
         self.window = None
+        self.ems = email_sender
 
     def instantiate(self):
         if self.window is None:
@@ -20,6 +20,7 @@ class EmailSender:
 
             if event == WIN_CLOSED:
                 self.window.close()
+                self.ems.unhidden_window()
                 break
 
             if event == '-Send-':
@@ -29,9 +30,6 @@ class EmailSender:
                 sg.popup(
                     f'O titulo é: {title}\nO Conteudo é : {content}', title='E-mail'
                 )
-            if event == '-ListEditor-':
-                self.hide_window()
-                init_list_editor(self)
 
     def close_window(self):
         if self.window is not None:
